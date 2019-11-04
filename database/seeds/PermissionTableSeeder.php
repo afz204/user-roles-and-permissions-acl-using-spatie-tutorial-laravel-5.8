@@ -12,20 +12,18 @@ class PermissionTableSeeder extends Seeder
      */
     public function run()
     {
-        $permissions = [
-           'role-list',
-           'role-create',
-           'role-edit',
-           'role-delete',
-           'product-list',
-           'product-create',
-           'product-edit',
-           'product-delete'
-        ];
-
-
-        foreach ($permissions as $permission) {
-             Permission::create(['name' => $permission]);
-        }
+        $user = User::create([
+          'name' => 'Arfan Azhari', 
+          'email' => 'afz60.30@gmail.com',
+          'password' => bcrypt('admin123!')
+        ]);
+  
+        $role = Role::create(['name' => 'Admin']);
+   
+        $permissions = Permission::pluck('id','id')->all();
+  
+        $role->syncPermissions($permissions);
+   
+        $user->assignRole([$role->id]);
     }
 }
